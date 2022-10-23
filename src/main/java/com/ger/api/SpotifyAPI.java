@@ -17,101 +17,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ger.dto.UserDTO;
 import com.ger.exception.UserException;
+import com.ger.service.SpotifyServiceImpl;
 import com.ger.service.UserService;
 
 @RestController
 @RequestMapping(value = "/user")
 public class SpotifyAPI {
-//    
-//    @Autowired
-//    private UserService userService;
-//    @Autowired
-//    private Environment environment;
-//    
+    
+    @Autowired
+    SpotifyServiceImpl spotifyWebAPI;
+
+//    1. The Application makes a request for authorization to access user data to the Spotify Accounts Service, which in term prompts the User to Login or otherwise approve the authorization of the Application to access their data. 
+//
+//    2. Once approved, the Applcation makes another request to the Spotify Accounts Service requesting access and refresh tokens. The Spotify Accounts Service returns a response with the access and refresh tokens. 
+//
+//    3. The Application can now use the access token in its requests to the Web API for user data. 
     
     
     
-    
-    
-    
-    
-    
-    
-//    
-//    @GetMapping(value = "/users")
-//    public ResponseEntity<List<UserDTO>> getAllUsers() 
-//            throws UserException {
-//        
-//        List<UserDTO> listOfUsers = userService.getAllUsers();
-//        
-//        return new ResponseEntity<>(listOfUsers, HttpStatus.OK);
-//    }
-//    
-//    @GetMapping(value = "/user/{id}")
-//    public ResponseEntity<UserDTO> getUserById(@PathVariable Integer id) 
-//            throws UserException {
-//        
-//        UserDTO userDTO = userService.getUser(id);
-//        
-//        return new ResponseEntity<>(userDTO, HttpStatus.OK);
-//    }
-//    
-//    /*
-//     * POST
-//     * http://localhost:8765/user/users
-//     * {
-//     *  "firstName": " ",
-//     *  "lastName": " ",
-//     *  "email": " ",
-//     *  "dateOfBirth": "YYYY-MM-DD"
-//     * }
-//     */
-//    @PostMapping(value = "/users")
-//    public ResponseEntity<String> postNewUser(@RequestBody UserDTO userDTO) 
-//            throws UserException {
-//        
-//        Integer newUserId = userService.postNewUser(userDTO);
-//        String successMessage = environment.getProperty("API.ADD_NEW_USER_SUCCESS") + newUserId;
-//        
-//        return new ResponseEntity<>(successMessage, HttpStatus.CREATED);  
-//        
-//    }
-//    
-//    /*
-//     * PUT
-//     * http://localhost:8765/user/user/{id}
-//     * {
-//     *  "firstName": " ",
-//     *  "lastName": " ",
-//     *  "email": " ",
-//     *  "dateOfBirth": "YYYY-MM-DD"
-//     * }
-//     */
-//    @PutMapping(value = "/user/{id}")
-//    public ResponseEntity<String> updateUser(@PathVariable Integer id, @RequestBody UserDTO userDTO) 
-//            throws UserException {
-//                
-//        userService.updateUser(id, userDTO.getFirstName());
-//        String successMessage = environment.getProperty("API.USER_UPDATE_SUCCESS");
-//        
-//        return new ResponseEntity<>(successMessage, HttpStatus.OK);
-//        
-//    }
-//    
-//    /*
-//     * DELETE
-//     * http://localhost:8765/user/user/{id}
-//     */
-//    @DeleteMapping(value = "/user/{id}")
-//    public ResponseEntity<String> deleteUser(@PathVariable Integer id) 
-//            throws UserException{
-//        
-//        userService.deleteUser(id);
-//        
-//        String successMessage = environment.getProperty("API.USER_DELETE_SUCCESS");
-//        
-//        return new ResponseEntity<>(successMessage, HttpStatus.OK);
-//    }
+    //1. Make a request to the SAS 
+
 
 }
 
