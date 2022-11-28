@@ -77,7 +77,7 @@ public class SpotifyServiceImpl implements SpotifyService {
 
         final SearchArtistsRequest searchArtistsRequest = spotifyApi.searchArtists(artistSearchRequest)
 //              .market(CountryCode.SE)
-//              .limit(10)
+              .limit(50)
 //              .offset(0)
 //              .includeExternal("audio")
                 .build();
