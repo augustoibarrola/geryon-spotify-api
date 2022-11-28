@@ -1,9 +1,8 @@
 package com.ger.service;
 
 import java.io.IOException;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.hc.core5.http.ParseException;
 import org.springframework.stereotype.Service;
@@ -73,7 +72,7 @@ public class SpotifyServiceImpl implements SpotifyService {
         }
     }
 
-    public void searchArtists_Sync(String artistSearchRequest) {
+    public List<Artist> searchArtists_Sync(String artistSearchRequest) {
 //        Example; Lady Gaga
 
         final SearchArtistsRequest searchArtistsRequest = spotifyApi.searchArtists(artistSearchRequest)
@@ -82,22 +81,39 @@ public class SpotifyServiceImpl implements SpotifyService {
 //              .offset(0)
 //              .includeExternal("audio")
                 .build();
+        
+        List<Artist> artistList = new ArrayList<>();
+
 
         try {
             final Paging<Artist> artistPaging = searchArtistsRequest.execute();
 
             Artist[] artistsResults = artistPaging.getItems();
-
-            System.out.println("Total: " + artistPaging.getTotal()); //Total: 28
-            System.out.println("Total: " + artistsResults.length);//Total: 20
+ 
+            System.out.println("Total: " + artistPaging.getTotal()); // Total: 28
+            System.out.println("Total: " + artistsResults.length);// Total: 20
 
             for (Artist artist : artistsResults) {
-                System.out.println(artist.toString());//Artist(name=Lady Gaga, externalUrls=ExternalUrl(externalUrls={spotify=https://open.spotify.com/artist/1HY2Jd0NmPuamShAr6KMms}), followers=Followers(href=null, total=23840533), genres=[art pop, dance pop, pop], href=https://api.spotify.com/v1/artists/1HY2Jd0NmPuamShAr6KMms, id=1HY2Jd0NmPuamShAr6KMms, images=[Image(height=640, url=https://i.scdn.co/image/ab6761610000e5ebc8d3d98a1bccbe71393dbfbf, width=640), Image(height=320, url=https://i.scdn.co/image/ab67616100005174c8d3d98a1bccbe71393dbfbf, width=320), Image(height=160, url=https://i.scdn.co/image/ab6761610000f178c8d3d98a1bccbe71393dbfbf, width=160)], popularity=84, type=ARTIST, uri=spotify:artist:1HY2Jd0NmPuamShAr6KMms)
+                System.out.println(artist.toString());// Artist(name=Lady Gaga,
+                                                      // externalUrls=ExternalUrl(externalUrls={spotify=https://open.spotify.com/artist/1HY2Jd0NmPuamShAr6KMms}),
+                                                      // followers=Followers(href=null, total=23840533), genres=[art
+                                                      // pop, dance pop, pop],
+                                                      // href=https://api.spotify.com/v1/artists/1HY2Jd0NmPuamShAr6KMms,
+                                                      // id=1HY2Jd0NmPuamShAr6KMms, images=[Image(height=640,
+                                                      // url=https://i.scdn.co/image/ab6761610000e5ebc8d3d98a1bccbe71393dbfbf,
+                                                      // width=640), Image(height=320,
+                                                      // url=https://i.scdn.co/image/ab67616100005174c8d3d98a1bccbe71393dbfbf,
+                                                      // width=320), Image(height=160,
+                                                      // url=https://i.scdn.co/image/ab6761610000f178c8d3d98a1bccbe71393dbfbf,
+                                                      // width=160)], popularity=84, type=ARTIST,
+                                                      // uri=spotify:artist:1HY2Jd0NmPuamShAr6KMms)
+               artistList.add(artist);
 
             }
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());
         }
+        return artistList;
     }
 
 }
