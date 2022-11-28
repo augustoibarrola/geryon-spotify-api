@@ -86,28 +86,28 @@ public class SpotifyServiceImpl implements SpotifyService {
         try {
             final Paging<Artist> artistPaging = searchArtistsRequest.execute();
 
-//            Artist[] artistsResults = artistPaging.getItems();
-
-            List<Artist> artistsResults = new ArrayList<>(Arrays.asList(artistPaging.getItems()));
-
-            System.out.println("Total: " + artistPaging.getTotal());
-            System.out.println("Total: " + artistsResults.size());
-
-            Collections.sort(artistsResults, new Comparator<Artist>() {
-                public int compare(Artist artist1, Artist artist2) {
-                    return artist2.getFollowers().getTotal().compareTo(artist1.getFollowers().getTotal());
-                }
-            });
-            artistList = artistsResults;
-            for (Artist artist : artistsResults) {
-
-                System.out.println(artist.toString());
-
-            }
+            artistList = organizeSearchedArtistsByTotalFollowers(artistPaging);
+            
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());
         }
         return artistList;
     }
+    
+    private List<Artist> organizeSearchedArtistsByTotalFollowers(Paging<Artist> artistPaging ){
+        
+        List<Artist> artistsResults = new ArrayList<>(Arrays.asList(artistPaging.getItems()));
 
-}
+        Collections.sort(artistsResults, new Comparator<Artist>() {
+            public int compare(Artist artist1, Artist artist2) {
+                return artist2.getFollowers().getTotal().compareTo(artist1.getFollowers().getTotal());
+            }
+        });
+
+        //        Uncomment to see the returned list of Searched Artists in the console
+        //        for (Artist artist : artistsResults) {System.out.println(artist.toString());}
+        
+        return artistsResults;
+    }
+
+ }
