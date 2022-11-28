@@ -2,6 +2,9 @@ package com.ger.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.hc.core5.http.ParseException;
@@ -73,41 +76,32 @@ public class SpotifyServiceImpl implements SpotifyService {
     }
 
     public List<Artist> searchArtists_Sync(String artistSearchRequest) {
-//        Example; Lady Gaga
 
         final SearchArtistsRequest searchArtistsRequest = spotifyApi.searchArtists(artistSearchRequest)
-//              .market(CountryCode.SE)
-              .limit(50)
-//              .offset(0)
-//              .includeExternal("audio")
+                .limit(50)
                 .build();
-        
-        List<Artist> artistList = new ArrayList<>();
 
+        List<Artist> artistList = new ArrayList<>();
 
         try {
             final Paging<Artist> artistPaging = searchArtistsRequest.execute();
 
-            Artist[] artistsResults = artistPaging.getItems();
- 
-            System.out.println("Total: " + artistPaging.getTotal()); // Total: 28
-            System.out.println("Total: " + artistsResults.length);// Total: 20
+//            Artist[] artistsResults = artistPaging.getItems();
 
+            List<Artist> artistsResults = new ArrayList<>(Arrays.asList(artistPaging.getItems()));
+
+            System.out.println("Total: " + artistPaging.getTotal());
+            System.out.println("Total: " + artistsResults.size());
+
+            Collections.sort(artistsResults, new Comparator<Artist>() {
+                public int compare(Artist artist1, Artist artist2) {
+                    return artist2.getFollowers().getTotal().compareTo(artist1.getFollowers().getTotal());
+                }
+            });
+            artistList = artistsResults;
             for (Artist artist : artistsResults) {
-                System.out.println(artist.toString());// Artist(name=Lady Gaga,
-                                                      // externalUrls=ExternalUrl(externalUrls={spotify=https://open.spotify.com/artist/1HY2Jd0NmPuamShAr6KMms}),
-                                                      // followers=Followers(href=null, total=23840533), genres=[art
-                                                      // pop, dance pop, pop],
-                                                      // href=https://api.spotify.com/v1/artists/1HY2Jd0NmPuamShAr6KMms,
-                                                      // id=1HY2Jd0NmPuamShAr6KMms, images=[Image(height=640,
-                                                      // url=https://i.scdn.co/image/ab6761610000e5ebc8d3d98a1bccbe71393dbfbf,
-                                                      // width=640), Image(height=320,
-                                                      // url=https://i.scdn.co/image/ab67616100005174c8d3d98a1bccbe71393dbfbf,
-                                                      // width=320), Image(height=160,
-                                                      // url=https://i.scdn.co/image/ab6761610000f178c8d3d98a1bccbe71393dbfbf,
-                                                      // width=160)], popularity=84, type=ARTIST,
-                                                      // uri=spotify:artist:1HY2Jd0NmPuamShAr6KMms)
-               artistList.add(artist);
+
+                System.out.println(artist.toString());
 
             }
         } catch (IOException | SpotifyWebApiException | ParseException e) {
