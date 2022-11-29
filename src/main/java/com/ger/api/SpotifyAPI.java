@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ger.dto.ArtistAndAlbumResponse;
 import com.ger.service.SpotifyService;
 
 import se.michaelthelin.spotify.model_objects.specification.Album;
@@ -34,10 +35,10 @@ public class SpotifyAPI {
      * Searches for an artist by a their Spotify ID
      */
     @GetMapping(value = "/artist/{artistId}")
-    public ResponseEntity<Artist> getArtistById(@PathVariable String artistId) {
+    public ResponseEntity<ArtistAndAlbumResponse> getArtistById(@PathVariable String artistId) {
 
         System.out.println(artistId);
-        Artist artist = spotifyService.getArtistById(artistId);
+        ArtistAndAlbumResponse artist = spotifyService.getArtistById(artistId);
 
         return new ResponseEntity<>(artist, HttpStatus.OK);
     }

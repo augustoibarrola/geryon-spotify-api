@@ -8,20 +8,21 @@ import org.springframework.stereotype.Service;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.specification.Album;
+import se.michaelthelin.spotify.model_objects.specification.AlbumSimplified;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.TrackSimplified;
 import se.michaelthelin.spotify.requests.data.albums.GetAlbumRequest;
 import se.michaelthelin.spotify.requests.data.albums.GetAlbumsTracksRequest;
+import se.michaelthelin.spotify.requests.data.artists.GetArtistsAlbumsRequest;
 
 @Service("albumServiceImpl")
 public class AlbumServiceImpl implements AlbumService {
-
 
     @Override
     public Album getAlbumById(SpotifyApi spotifyApi, String albumId) {
         GetAlbumRequest getAlbumRequest = spotifyApi.getAlbum(albumId).build();
         Album album = null;
-        
+
         try {
             album = getAlbumRequest.execute();
         } catch (IOException | SpotifyWebApiException | ParseException e) {
@@ -33,18 +34,34 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public Paging<TrackSimplified> getAlbumTracksById(SpotifyApi spotifyApi, String albumId) {
         GetAlbumsTracksRequest getAlbumsTracksRequest = spotifyApi.getAlbumsTracks(albumId).build();
-        
-        Paging<TrackSimplified> trackSimplifiedPaging  = null;
-        
+
+        Paging<TrackSimplified> trackSimplifiedPaging = null;
+
         try {
             trackSimplifiedPaging = getAlbumsTracksRequest.execute();
 
             System.out.println("Total: " + trackSimplifiedPaging.getTotal());
-          } catch (IOException | SpotifyWebApiException | ParseException e) {
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());
-          }
-        
+        }
+
         return trackSimplifiedPaging;
+    }
+
+    @Override
+    public Paging<AlbumSimplified> getAlbumsByArtistId(SpotifyApi spotifyApi, String artistId) {
+
+        GetArtistsAlbumsRequest getArtistsAlbumsRequest = spotifyApi.getArtistsAlbums(artistId).build();
+        Paging<AlbumSimplified> albumSimplifiedPaging = null;
+        try {
+            albumSimplifiedPaging = getArtistsAlbumsRequest.execute();
+
+            System.out.println("Total: " + albumSimplifiedPaging.getTotal());
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return albumSimplifiedPaging;
+
     }
 
 }

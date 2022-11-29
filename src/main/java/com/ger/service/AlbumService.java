@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.specification.Album;
+import se.michaelthelin.spotify.model_objects.specification.AlbumSimplified;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.TrackSimplified;
 import se.michaelthelin.spotify.requests.data.albums.GetAlbumRequest;
@@ -19,5 +20,6 @@ import se.michaelthelin.spotify.requests.data.albums.GetAlbumRequest;
 public interface AlbumService {
     public Album getAlbumById(SpotifyApi spotifyApi, String albumId);
     public Paging<TrackSimplified> getAlbumTracksById(SpotifyApi spotifyApi, String albumId);
+    public Paging<AlbumSimplified> getAlbumsByArtistId(SpotifyApi spotifyApi, String artistId);
 
 }

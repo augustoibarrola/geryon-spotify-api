@@ -11,6 +11,7 @@ import org.apache.hc.core5.http.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ger.dto.ArtistAndAlbumResponse;
 import com.ger.security.SpotifyAuthorization;
 import com.ger.security.SpotifyAuthorizationImpl;
 
@@ -54,7 +55,7 @@ public class SpotifyServiceImpl implements SpotifyService {
     }
 
     @Override
-    public Artist getArtistById(String artistId) {
+    public ArtistAndAlbumResponse getArtistById(String artistId) {
         return artistService.getArtistById(spotifyApi, artistId);
     }
 
