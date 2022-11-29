@@ -11,6 +11,9 @@ import org.apache.hc.core5.http.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ger.security.SpotifyAuthorization;
+import com.ger.security.SpotifyAuthorizationImpl;
+
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.credentials.ClientCredentials;
@@ -28,6 +31,8 @@ import se.michaelthelin.spotify.requests.data.search.simplified.SearchArtistsReq
 public class SpotifyServiceImpl implements SpotifyService {
 
     @Autowired
+    SpotifyAuthorization spotifyAuthService;
+    @Autowired
     ArtistService artistService;
     @Autowired
     AlbumService albumService;
@@ -38,7 +43,6 @@ public class SpotifyServiceImpl implements SpotifyService {
     private static final String clientSecret = "7b2768355a4f443595eb92527183cd4c";
     private static final String redirectURI = "http://localhost:8787";
     private static final SpotifyApi spotifyApi = new SpotifyApi.Builder().setClientId(clientId).setClientSecret(clientSecret).build();
-    private static final ClientCredentialsRequest clientCredentialsRequest = spotifyApi.clientCredentials().build();
 
     public static SpotifyApi getSpotifyapi() {
         return spotifyApi;
@@ -46,21 +50,7 @@ public class SpotifyServiceImpl implements SpotifyService {
 
     @Override
     public void beginClientCredentialAuthorizationFlow() {
-        clientCredentials_Sync();
-    }
-
-    public static void clientCredentials_Sync() {
-        try {
-            ClientCredentials clientCredentials = clientCredentialsRequest.execute();
-
-            // Set access token for further "spotifyApi" object usage
-            spotifyApi.setAccessToken(clientCredentials.getAccessToken());
-
-            System.out.println("Expires in: " + clientCredentials.getExpiresIn());
-
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        spotifyAuthService.clientCredentialAuthorizationFlow(spotifyApi);
     }
 
     @Override
