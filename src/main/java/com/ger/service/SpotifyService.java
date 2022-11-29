@@ -2,12 +2,18 @@ package com.ger.service;
 
 import java.util.List;
 
+import se.michaelthelin.spotify.model_objects.specification.Album;
 import se.michaelthelin.spotify.model_objects.specification.Artist;
+import se.michaelthelin.spotify.model_objects.specification.Paging;
+import se.michaelthelin.spotify.model_objects.specification.TrackSimplified;
 
 public interface SpotifyService {
     
     public void beginClientCredentialAuthorizationFlow();
     public void getAlbum_Sync();
     public List<Artist> searchArtists_Sync(String artistSearchRequest);
+    public Artist getArtistById(String artistId);
+    public Album getAlbumById(String albumId);
+    public Paging<TrackSimplified>  getAlbumTracksById(String albumId);
 
 }
