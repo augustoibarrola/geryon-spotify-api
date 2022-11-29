@@ -26,18 +26,11 @@ public class SpotifyServiceImpl implements SpotifyService {
     private static final String clientId = "02f111e6167141cc9d9395babef9cbc6";
     private static final String clientSecret = "7b2768355a4f443595eb92527183cd4c";
     private static final String redirectURI = "http://localhost:8787";
-    private static final SpotifyApi spotifyApi = new SpotifyApi.Builder().setClientId(clientId)
-            .setClientSecret(clientSecret).build();
+    private static final SpotifyApi spotifyApi = new SpotifyApi.Builder().setClientId(clientId).setClientSecret(clientSecret).build();
+    private static final ClientCredentialsRequest clientCredentialsRequest = spotifyApi.clientCredentials().build();
 
     public static SpotifyApi getSpotifyapi() {
         return spotifyApi;
-    }
-
-    private static final ClientCredentialsRequest clientCredentialsRequest = spotifyApi.clientCredentials().build();
-
-    @Override
-    public void beginAuthCodeFlow() {
-
     }
 
     @Override
@@ -63,12 +56,10 @@ public class SpotifyServiceImpl implements SpotifyService {
 
         String id = "5zT1JLIj9E57p3e1rFm9Uq";
 
-        GetAlbumRequest getAlbumRequest = spotifyApi.getAlbum(id)
-//              .market(CountryCode.SE)
-                .build();
+        GetAlbumRequest getAlbumRequest = spotifyApi.getAlbum(id).build();
+        
         try {
             final Album album = getAlbumRequest.execute();
-
             System.out.println("Name: " + album.getName());
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());
@@ -88,7 +79,15 @@ public class SpotifyServiceImpl implements SpotifyService {
 
             artistList = organizeSearchedArtistsByTotalFollowers(artistPaging);
             
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
+        } catch (SpotifyWebApiException spotifyWebApiException) {
+            
+            if(spotifyWebApiException.getMessage().equals("The access token expired")) {
+                clientCredentials_Sync();
+                searchArtists_Sync(artistSearchRequest);
+            }
+            
+        }
+        catch (IOException | ParseException e) {
             System.out.println("Error: " + e.getMessage());
         }
         return artistList;

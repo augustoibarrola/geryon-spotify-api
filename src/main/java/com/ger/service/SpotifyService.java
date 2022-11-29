@@ -6,7 +6,6 @@ import se.michaelthelin.spotify.model_objects.specification.Artist;
 
 public interface SpotifyService {
     
-    public void beginAuthCodeFlow();
     public void beginClientCredentialAuthorizationFlow();
     public void getAlbum_Sync();
     public List<Artist> searchArtists_Sync(String artistSearchRequest);
