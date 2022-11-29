@@ -29,25 +29,6 @@ public class SpotifyAPI {
     @Qualifier("spotifyServiceImpl")
     SpotifyService spotifyService;
 
-    @GetMapping(value = "/test")
-    public ResponseEntity<String> getAuthorization() {
-
-        spotifyService.getAlbum_Sync();
-
-        return new ResponseEntity<>("Here I AM!", HttpStatus.OK);
-    }
-
-    /*
-     * Searches for an artist by a string representation of their name
-     */
-    @GetMapping(value = "/search/{artist_name}")
-    public ResponseEntity<List<Artist>> searchArtistByName(@PathVariable String artist_name) {
-
-        System.out.println(artist_name);
-        List<Artist> artistList = spotifyService.searchArtists_Sync(artist_name);
-
-        return new ResponseEntity<>(artistList, HttpStatus.OK);
-    }
 
     /*
      * Searches for an artist by a their Spotify ID
@@ -72,15 +53,26 @@ public class SpotifyAPI {
 
         return new ResponseEntity<>(album, HttpStatus.OK);
     }
-    
-    @GetMapping(value="/album/tracks/{albumId}")
-    public ResponseEntity<Paging<TrackSimplified>> getAlbumTracksById(@PathVariable String albumId){
-        
+
+    @GetMapping(value = "/album/tracks/{albumId}")
+    public ResponseEntity<Paging<TrackSimplified>> getAlbumTracksById(@PathVariable String albumId) {
+
         System.out.println(albumId);
-        
+
         Paging<TrackSimplified> trackSimplifiedPaging = spotifyService.getAlbumTracksById(albumId);
-        
+
         return new ResponseEntity<>(trackSimplifiedPaging, HttpStatus.OK);
     }
 
+    /*
+     * Searches for an artist by a string representation of their name
+     */
+    @GetMapping(value = "/search/{artist_name}")
+    public ResponseEntity<List<Artist>> searchArtistByName(@PathVariable String artist_name) {
+        
+        System.out.println(artist_name);
+        List<Artist> artistList = spotifyService.searchArtists_Sync(artist_name);
+        
+        return new ResponseEntity<>(artistList, HttpStatus.OK);
+    }
 }

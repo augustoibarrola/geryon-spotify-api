@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.hc.core5.http.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import se.michaelthelin.spotify.SpotifyApi;
@@ -25,6 +26,13 @@ import se.michaelthelin.spotify.requests.data.search.simplified.SearchArtistsReq
 
 @Service("spotifyServiceImpl")
 public class SpotifyServiceImpl implements SpotifyService {
+
+    @Autowired
+    ArtistService artistService;
+    @Autowired
+    AlbumService albumService;
+    @Autowired
+    SearchService searchService;
 
     private static final String clientId = "02f111e6167141cc9d9395babef9cbc6";
     private static final String clientSecret = "7b2768355a4f443595eb92527183cd4c";
@@ -54,109 +62,24 @@ public class SpotifyServiceImpl implements SpotifyService {
             System.out.println("Error: " + e.getMessage());
         }
     }
-    
+
     @Override
     public Artist getArtistById(String artistId) {
-        
-        GetArtistRequest getArtistRequest = spotifyApi.getArtist(artistId).build();
-        Artist artist = null;
-        try {
-            artist = getArtistRequest.execute();
-
-            System.out.println("Name: " + artist.getName());
-          } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-          }
-        return artist;
+        return artistService.getArtistById(spotifyApi, artistId);
     }
-    
+
     @Override
     public Album getAlbumById(String albumId) {
-        
-        GetAlbumRequest getAlbumRequest = spotifyApi.getAlbum(albumId).build();
-        Album album = null;
-        
-        try {
-            album = getAlbumRequest.execute();
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        return album;
+        return albumService.getAlbumById(spotifyApi, albumId);
     }
-    
+
     @Override
-    public Paging<TrackSimplified>  getAlbumTracksById(String albumId) {
-        
-        GetAlbumsTracksRequest getAlbumsTracksRequest = spotifyApi.getAlbumsTracks(albumId).build();
-        
-        Paging<TrackSimplified> trackSimplifiedPaging  = null;
-        
-        try {
-            trackSimplifiedPaging = getAlbumsTracksRequest.execute();
-
-            System.out.println("Total: " + trackSimplifiedPaging.getTotal());
-          } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-          }
-        
-        return trackSimplifiedPaging;
+    public Paging<TrackSimplified> getAlbumTracksById(String albumId) {
+        return albumService.getAlbumTracksById(spotifyApi, albumId);
     }
 
-    public void getAlbum_Sync() {
-
-        String id = "5zT1JLIj9E57p3e1rFm9Uq";
-
-        GetAlbumRequest getAlbumRequest = spotifyApi.getAlbum(id).build();
-        
-        try {
-            final Album album = getAlbumRequest.execute();
-            System.out.println("Name: " + album.getName());
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+    public List<Artist> searchArtists_Sync(String searchString) {
+        return searchService.searchArtistsBySearchString(spotifyApi, searchString);
     }
 
-    public List<Artist> searchArtists_Sync(String artistSearchRequest) {
-
-        final SearchArtistsRequest searchArtistsRequest = spotifyApi.searchArtists(artistSearchRequest)
-                .limit(50)
-                .build();
-
-        List<Artist> artistList = new ArrayList<>();
-
-        try {
-            final Paging<Artist> artistPaging = searchArtistsRequest.execute();
-
-            artistList = organizeSearchedArtistsByTotalFollowers(artistPaging);
-            
-        } catch (SpotifyWebApiException spotifyWebApiException) {
-            
-            if(spotifyWebApiException.getMessage().equals("The access token expired")) {
-                clientCredentials_Sync();
-                searchArtists_Sync(artistSearchRequest);
-            }
-            
-        }
-        catch (IOException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        return artistList;
-    }
-    
-    private List<Artist> organizeSearchedArtistsByTotalFollowers(Paging<Artist> artistPaging ){
-        
-        List<Artist> artistsResults = new ArrayList<>(Arrays.asList(artistPaging.getItems()));
-
-        Collections.sort(artistsResults, new Comparator<Artist>() {
-            public int compare(Artist artist1, Artist artist2) {
-                return artist2.getFollowers().getTotal().compareTo(artist1.getFollowers().getTotal());
-            }
-        });
-
-        //        Uncomment to see the returned list of Searched Artists in the console
-        //        for (Artist artist : artistsResults) {System.out.println(artist.toString());}
-        
-        return artistsResults;
-    }
-
- }
+}
