@@ -29,20 +29,15 @@ public class ArtistServiceImpl implements ArtistService {
         GetArtistRequest getArtistRequest = spotifyApi.getArtist(artistId).build();
         Artist artist = null;
         List<AlbumSimplified> albums = null;
-        Paging<AlbumSimplified> albumSimplifiedPaging = null;
-
         
         try {
             artist = getArtistRequest.execute();
 
             System.out.println("Name: " + artist.getName());
 
-            albumSimplifiedPaging = albumService.getAlbumsByArtistId(spotifyApi, artist.getId());
-            
-            albums = Arrays.asList(albumSimplifiedPaging.getItems());
+            albums = albumService.getAlbumsByArtistId(spotifyApi, artist.getId());
             
             return new ArtistAndAlbumResponse(artist, albums);
-
             
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());

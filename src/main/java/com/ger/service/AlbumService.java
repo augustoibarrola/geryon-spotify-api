@@ -1,6 +1,7 @@
 package com.ger.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.persistence.PersistenceContext;
 
@@ -20,6 +21,6 @@ import se.michaelthelin.spotify.requests.data.albums.GetAlbumRequest;
 public interface AlbumService {
     public Album getAlbumById(SpotifyApi spotifyApi, String albumId);
     public Paging<TrackSimplified> getAlbumTracksById(SpotifyApi spotifyApi, String albumId);
-    public Paging<AlbumSimplified> getAlbumsByArtistId(SpotifyApi spotifyApi, String artistId);
+    public List<AlbumSimplified> getAlbumsByArtistId(SpotifyApi spotifyApi, String artistId);
 
 }
