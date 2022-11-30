@@ -49,7 +49,6 @@ public class SpotifyAPI {
     @GetMapping(value = "/album/{albumId}")
     public ResponseEntity<Album> getAlbumById(@PathVariable String albumId) {
 
-        System.out.println(albumId);
         Album album = spotifyService.getAlbumById(albumId);
 
         return new ResponseEntity<>(album, HttpStatus.OK);
