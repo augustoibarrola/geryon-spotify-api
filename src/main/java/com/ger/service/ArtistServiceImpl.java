@@ -25,7 +25,7 @@ public class ArtistServiceImpl implements ArtistService {
     AlbumService albumService;
 
     @Override
-    public ArtistAndAlbumResponse getArtistById(SpotifyApi spotifyApi, String artistId) {
+    public ArtistAndAlbumResponse<Artist, List<AlbumSimplified>> getArtistById(SpotifyApi spotifyApi, String artistId) {
         GetArtistRequest getArtistRequest = spotifyApi.getArtist(artistId).build();
         Artist artist = null;
         List<AlbumSimplified> albums = null;
@@ -37,7 +37,7 @@ public class ArtistServiceImpl implements ArtistService {
 
             albums = albumService.getAlbumsByArtistId(spotifyApi, artist.getId());
             
-            return new ArtistAndAlbumResponse(artist, albums);
+            return new ArtistAndAlbumResponse<Artist, List<AlbumSimplified>>(artist, albums);
             
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());

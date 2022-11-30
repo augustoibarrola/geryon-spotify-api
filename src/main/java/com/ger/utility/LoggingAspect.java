@@ -17,14 +17,14 @@ public class LoggingAspect {
         LOGGER.error(exception.getMessage(), exception);
     }
     
-    @Before("execution(* com.ger.api.*.*(..))")
-    public void beforeAdvice() throws Exception {
-        System.out.println("API Endpoint is going to be called.");
+    @Before("execution(* com.ger.api.*.getArtist*(..))")
+    public void beforeGetAlbumById() throws Exception {
+        System.out.println("\nGetting artist and their albums for ya...\n");
     }
     
-    @After("execution(* com.ger.api.*.*(..))")
+    @Before("execution(* com.ger.api.*.getAlbum*(..))")
     public void afterAdvice() throws Exception {
-        System.out.println("API Endpoint was called.");
+        System.out.println("\nGetting that album...\n");
     }
 
 }
