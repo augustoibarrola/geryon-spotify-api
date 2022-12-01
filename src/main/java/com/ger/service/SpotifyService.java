@@ -16,5 +16,6 @@ public interface SpotifyService {
     public ArtistAndAlbumResponse getArtistById(String artistId);
     public Album getAlbumById(String albumId);
     public Paging<TrackSimplified> getAlbumTracksById(String albumId);
+    void beginAuthorizationCodePKCEFlow();
 
 }

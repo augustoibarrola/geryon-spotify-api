@@ -53,6 +53,11 @@ public class SpotifyServiceImpl implements SpotifyService {
     public void beginClientCredentialAuthorizationFlow() {
         spotifyAuthService.clientCredentialAuthorizationFlow(spotifyApi);
     }
+    
+    @Override
+    public void beginAuthorizationCodePKCEFlow() {
+        spotifyAuthService.authorizationCodePKCEFlow();
+    }
 
     @Override
     public ArtistAndAlbumResponse getArtistById(String artistId) {
