@@ -23,7 +23,7 @@ import se.michaelthelin.spotify.model_objects.specification.TrackSimplified;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/ger")
+@RequestMapping(value = "/")
 public class SpotifyAPI {
 
     @Autowired
@@ -34,8 +34,8 @@ public class SpotifyAPI {
     /*
      * Searches for an artist by a their Spotify ID
      */
-    @GetMapping(value = "/artist/{artistId}")
-    public ResponseEntity<ArtistAndAlbumResponse> getArtistById(@PathVariable String artistId) {
+    @GetMapping(value = "/artists/{artistId}")
+    public ResponseEntity<ArtistAndAlbumResponse> readArtistById(@PathVariable String artistId) {
 
         System.out.println(artistId);
         ArtistAndAlbumResponse artist = spotifyService.getArtistById(artistId);
@@ -46,16 +46,16 @@ public class SpotifyAPI {
     /*
      * Searches for an album by its Spotify ID
      */
-    @GetMapping(value = "/album/{albumId}")
-    public ResponseEntity<Album> getAlbumById(@PathVariable String albumId) {
+    @GetMapping(value = "/albums/{albumId}")
+    public ResponseEntity<Album> readAlbumById(@PathVariable String albumId) {
 
         Album album = spotifyService.getAlbumById(albumId);
 
         return new ResponseEntity<>(album, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/album/tracks/{albumId}")
-    public ResponseEntity<Paging<TrackSimplified>> getAlbumTracksById(@PathVariable String albumId) {
+    @GetMapping(value = "/albums/tracks/{albumId}")
+    public ResponseEntity<Paging<TrackSimplified>> readAlbumTracksById(@PathVariable String albumId) {
 
         System.out.println(albumId);
 

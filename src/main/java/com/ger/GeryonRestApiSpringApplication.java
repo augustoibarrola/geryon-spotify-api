@@ -21,8 +21,8 @@ public class GeryonRestApiSpringApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-//        spotifyService.beginClientCredentialAuthorizationFlow();
-        spotifyService.beginAuthorizationCodePKCEFlow();
+        spotifyService.beginClientCredentialAuthorizationFlow();
+//        spotifyService.beginAuthorizationCodePKCEFlow();
     }
 
 }
